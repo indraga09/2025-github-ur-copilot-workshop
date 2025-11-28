@@ -2,6 +2,11 @@
  * Main application controller for Pomodoro Timer.
  */
 
+// Constants for circular progress bar
+const PROGRESS_RING_RADIUS = 90;
+const PROGRESS_RING_CIRCUMFERENCE = 2 * Math.PI * PROGRESS_RING_RADIUS;
+const PARTICLE_COUNT = 20;
+
 class PomodoroApp {
     /**
      * Initialize Pomodoro application
@@ -119,6 +124,12 @@ class PomodoroApp {
         this.timer.start();
         this.sessionStartTime = new Date();
         this.showNotification('Timer started! Stay focused!');
+        
+        // Create particles during work sessions
+        const session = this.timer.getCurrentSession();
+        if (session.type === 'work') {
+            this.createParticles();
+        }
     }
     
     /**
@@ -127,6 +138,7 @@ class PomodoroApp {
     handlePauseClick() {
         this.timer.pause();
         this.showNotification('Timer paused');
+        this.removeParticles();
     }
     
     /**
@@ -138,6 +150,7 @@ class PomodoroApp {
         this.storage.clearSession();
         this.updateDisplay(this.timer.getCurrentSession());
         this.showNotification('Timer reset');
+        this.removeParticles();
     }
     
     /**
@@ -148,6 +161,9 @@ class PomodoroApp {
         const message = showSessionComplete(session.type);
         this.showNotification(message);
         
+        // Remove particles when session completes
+        this.removeParticles();
+        
         // Log completed session to backend
         this.logSessionToBackend(session);
         
@@ -157,6 +173,11 @@ class PomodoroApp {
             settings.autoStartBreaks && session.type === 'work') {
             setTimeout(() => {
                 this.timer.start();
+                // Create particles for work sessions
+                const nextSession = this.timer.getCurrentSession();
+                if (nextSession.type === 'work') {
+                    this.createParticles();
+                }
             }, 3000); // 3 second delay
         }
     }
@@ -186,13 +207,74 @@ class PomodoroApp {
     }
     
     /**
-     * Update progress bar
+     * Update circular progress bar with color transitions
      * @param {number} percentage - Progress percentage (0-100)
      */
     updateProgress(percentage) {
+        const progressRing = document.getElementById('progressRing');
+        const progressText = document.getElementById('progressText');
+        
+        if (progressRing) {
+            const offset = PROGRESS_RING_CIRCUMFERENCE - (percentage / 100) * PROGRESS_RING_CIRCUMFERENCE;
+            progressRing.style.strokeDashoffset = offset;
+            
+            // Dynamic color transitions
+            progressRing.classList.remove('progress-early', 'progress-mid', 'progress-urgent');
+            if (percentage < 33) {
+                progressRing.classList.add('progress-early');
+            } else if (percentage < 66) {
+                progressRing.classList.add('progress-mid');
+            } else {
+                progressRing.classList.add('progress-urgent');
+            }
+        }
+        
+        if (progressText) {
+            progressText.textContent = `${Math.round(percentage)}%`;
+        }
+        
+        // Fallback for old linear progress bar
         const progressFill = document.getElementById('progressFill');
         if (progressFill) {
             progressFill.style.width = `${Math.min(100, Math.max(0, percentage))}%`;
+        }
+    }
+    
+    /**
+     * Create floating particles during work sessions
+     */
+    createParticles() {
+        const container = document.querySelector('.timer-card');
+        if (!container || container.querySelector('.particles-container')) {
+            return;
+        }
+        
+        // Check if user prefers reduced motion
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+        
+        const particlesDiv = document.createElement('div');
+        particlesDiv.className = 'particles-container';
+        container.appendChild(particlesDiv);
+        
+        // Create particles
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 3 + 's';
+            particlesDiv.appendChild(particle);
+        }
+    }
+    
+    /**
+     * Remove particle effects
+     */
+    removeParticles() {
+        const particles = document.querySelector('.particles-container');
+        if (particles) {
+            particles.remove();
         }
     }
     
