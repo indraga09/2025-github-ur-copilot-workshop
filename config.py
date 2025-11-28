@@ -8,10 +8,10 @@ class Config:
     
     def __init__(self) -> None:
         """Initialize configuration with environment variables."""
-        self.FLASK_ENV = os.getenv('FLASK_ENV', 'development')
-        self.FLASK_DEBUG = os.getenv('FLASK_DEBUG', 'True').lower() == 'true'
-        self.SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
-        self.HOST = os.getenv('HOST', '127.0.0.1')
+        self.FLASK_ENV = os.getenv('FLASK_ENV', 'development') or 'development'
+        self.FLASK_DEBUG = os.getenv('FLASK_DEBUG', 'True').lower() in ['true', '1']
+        self.SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production') or 'dev-secret-key-change-in-production'
+        self.HOST = os.getenv('HOST', '127.0.0.1') or '127.0.0.1'
         self.PORT = int(os.getenv('PORT', '5000'))
     
     def get_timer_defaults(self) -> Dict[str, int]:
