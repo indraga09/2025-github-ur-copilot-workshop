@@ -162,7 +162,12 @@ def create_session() -> Dict[str, Any]:
     Returns:
         Dictionary with session creation result
     """
-    data = validate_session_request(request.get_json() or {})
+    try:
+        request_data = request.get_json(force=True)
+    except:
+        request_data = None
+        
+    data = validate_session_request(request_data or {})
     
     session = PomodoroSession(
         session_type=data['session_type'],
