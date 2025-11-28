@@ -818,6 +818,13 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  
+  /* Completely hide particle effects for users who prefer reduced motion */
+  .particles-container,
+  .particle,
+  .ripple {
+    display: none !important;
+  }
 }
 
 /* Focus indicators for keyboard navigation */

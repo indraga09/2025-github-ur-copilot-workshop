@@ -2,6 +2,11 @@
  * Main application controller for Pomodoro Timer.
  */
 
+// Constants for circular progress bar
+const PROGRESS_RING_RADIUS = 90;
+const PROGRESS_RING_CIRCUMFERENCE = 2 * Math.PI * PROGRESS_RING_RADIUS;
+const PARTICLE_COUNT = 20;
+
 class PomodoroApp {
     /**
      * Initialize Pomodoro application
@@ -210,8 +215,7 @@ class PomodoroApp {
         const progressText = document.getElementById('progressText');
         
         if (progressRing) {
-            const circumference = 2 * Math.PI * 90; // radius = 90
-            const offset = circumference - (percentage / 100) * circumference;
+            const offset = PROGRESS_RING_CIRCUMFERENCE - (percentage / 100) * PROGRESS_RING_CIRCUMFERENCE;
             progressRing.style.strokeDashoffset = offset;
             
             // Dynamic color transitions
@@ -254,8 +258,8 @@ class PomodoroApp {
         particlesDiv.className = 'particles-container';
         container.appendChild(particlesDiv);
         
-        // Create 20 particles
-        for (let i = 0; i < 20; i++) {
+        // Create particles
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
             const particle = document.createElement('div');
             particle.className = 'particle';
             particle.style.left = Math.random() * 100 + '%';
