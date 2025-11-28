@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pomodoro Timer - Boost your productivity with the Pomodoro Technique">
+    <title>{% block title %}Pomodoro Timer{% endblock %}</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
+    
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <div class="nav-container">
+                <a href="{{ url_for('serve_index') }}" class="nav-logo">🍅 Pomodoro</a>
+                <div class="nav-menu">
+                    <a href="{{ url_for('serve_index') }}" class="nav-link">Timer</a>
+                    <a href="{{ url_for('serve_history') }}" class="nav-link">History</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Pomodoro Timer. Built for GitHub Universe Workshop.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

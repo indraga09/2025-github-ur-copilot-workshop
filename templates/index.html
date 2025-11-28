@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Pomodoro Timer{% endblock %}
+
+{% block content %}
+<div class="timer-container">
+    <div class="timer-card">
+        <!-- Session Type Indicator -->
+        <div class="session-type" id="sessionType">
+            <span class="session-text">Work Session</span>
+        </div>
+        
+        <!-- Timer Display -->
+        <div class="timer-display" id="timerDisplay">
+            <span class="time-text">25:00</span>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <!-- Timer Controls -->
+        <div class="timer-controls">
+            <button class="btn btn-primary" id="startBtn">
+                <span class="btn-text">Start</span>
+            </button>
+            <button class="btn btn-secondary" id="pauseBtn" style="display: none;">
+                <span class="btn-text">Pause</span>
+            </button>
+            <button class="btn btn-outline" id="resetBtn">
+                <span class="btn-text">Reset</span>
+            </button>
+        </div>
+        
+        <!-- Cycle Counter -->
+        <div class="cycle-counter">
+            <span class="cycle-text">Cycle: <span id="cycleCount">1</span>/4</span>
+        </div>
+        
+        <!-- Task Input -->
+        <div class="task-input-container">
+            <input type="text" id="taskInput" class="task-input" placeholder="What are you working on?" maxlength="100">
+        </div>
+    </div>
+    
+    <!-- Settings Button -->
+    <button class="settings-btn" id="settingsBtn" title="Settings">
+        ⚙️
+    </button>
+</div>
+
+<!-- Notification Area -->
+<div class="notification" id="notification" style="display: none;">
+    <span class="notification-text" id="notificationText"></span>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Pass configuration from backend to frontend
+    window.TIMER_CONFIG = {
+        workMinutes: {{ timer_defaults.work_minutes }},
+        shortBreakMinutes: {{ timer_defaults.short_break_minutes }},
+        longBreakMinutes: {{ timer_defaults.long_break_minutes }}
+    };
+</script>
+<script src="{{ url_for('static', filename='js/storage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/timer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}
