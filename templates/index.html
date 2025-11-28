@@ -15,11 +15,18 @@
             <span class="time-text">25:00</span>
         </div>
         
-        <!-- Progress Bar -->
+        <!-- Circular Progress Bar -->
         <div class="progress-container">
-            <div class="progress-bar" id="progressBar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
+            <svg class="circular-progress" width="200" height="200" viewBox="0 0 200 200">
+                <circle class="progress-ring-bg" cx="100" cy="100" r="90" 
+                        fill="none" stroke="var(--border-light)" stroke-width="8"/>
+                <circle class="progress-ring" cx="100" cy="100" r="90" 
+                        fill="none" stroke="var(--primary-color)" stroke-width="8"
+                        stroke-linecap="round" stroke-dasharray="565.48" 
+                        stroke-dashoffset="565.48" id="progressRing"/>
+                <text class="progress-text" x="100" y="105" text-anchor="middle" 
+                      id="progressText">100%</text>
+            </svg>
         </div>
         
         <!-- Timer Controls -->
